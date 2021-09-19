@@ -23,8 +23,9 @@ const Layout = ({ children }) => {
   `)
 
   return (
-    <>
-    </>
+    <div className="h-screen max-w-screen-xl flex justify-center items-center px-2 md:px-4 font-sans text-base text-body mx-auto">
+      { children }
+    </div>
   )
 }
 
