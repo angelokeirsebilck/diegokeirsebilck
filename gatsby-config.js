@@ -14,21 +14,21 @@ module.exports = {
     title: `Elektro Diego - Diego Keirsebilck - Voor al je algemene elektriciteitswerken`,
     description: `Elektro Diego - Diego Keirsebilck - Voor al je algemene elektriciteitswerken`,
     author: `@AngeloKeirsebilck`,
-    twitterUsername: '@AngeloKbilck',
-    siteUrl: 'https://elektro-diego.be',
-    image: '/elektro-diego-logo-black.jpg',
-},
+    twitterUsername: "@AngeloKbilck",
+    siteUrl: "https://elektro-diego.be",
+    image: "/elektro-diego-logo-black.jpg",
+  },
   plugins: [
     `gatsby-plugin-react-helmet`,
     `gatsby-plugin-image`,
     `gatsby-plugin-sitemap`,
     {
-      resolve: 'gatsby-plugin-robots-txt',
+      resolve: "gatsby-plugin-robots-txt",
       options: {
-        host: 'https://elektro-diego.be',
-        sitemap: 'https://elektro-diego.be/sitemap/sitemap-index.xml',
-        policy: [{ userAgent: '*', allow: '/' }]
-      }
+        host: "https://elektro-diego.be",
+        sitemap: "https://elektro-diego.be/sitemap/sitemap-index.xml",
+        policy: [{ userAgent: "*", allow: "/" }],
+      },
     },
     `gatsby-transformer-sharp`,
     `gatsby-plugin-sharp`,
@@ -65,19 +65,33 @@ module.exports = {
     // To learn more, visit: https://gatsby.dev/offline
     `gatsby-plugin-offline`,
     {
-      resolve: "gatsby-plugin-web-font-loader",
-      options: {
-        google: {
-          families: ["Red Hat Display"],
-        },
-      },
-    },
-    {
       resolve: "gatsby-source-strapi",
       options: {
         apiURL: process.env.STRAPI_URL,
         singleTypes: ["homebanner"],
         queryLimit: 1000,
+      },
+    },
+    {
+      resolve: `gatsby-plugin-google-fonts-v2`,
+      options: {
+        fonts: [
+          {
+            family: "Red Hat Display",
+            weights: [
+              "100",
+              "200",
+              "300",
+              "400",
+              "500",
+              "600",
+              "700",
+              "800",
+              "900",
+            ],
+          },
+        ],
+        display: "swap",
       },
     },
     "gatsby-plugin-postcss",
