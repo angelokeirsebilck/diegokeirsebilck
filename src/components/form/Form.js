@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 
 // Components
 import ThemeButton from "../base/Button"
@@ -6,9 +6,12 @@ import ThemeButton from "../base/Button"
 import { useForm } from "react-hook-form"
 
 const Form = () => {
+  const [isSubmitting, setIsSubmitting] = useState(false)
+
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm()
 
@@ -27,7 +30,9 @@ const Form = () => {
         ...data,
       }),
     })
-      .then(console.log("form submitted."))
+      .then(() => {
+        reset()
+      })
       .catch(error => console.log(error))
   }
 
@@ -36,17 +41,15 @@ const Form = () => {
   const textareaClass =
     "peer h-10 p-1 pt-1.5 leading-none w-full border-0 border-b-2 text-base outline-none focus:ring-0 focus:border-primary placeholder-transparent "
 
-  console.log(errors)
-
   return (
     <form
       autoComplete="off"
       onSubmit={handleSubmit(onSubmit)}
       data-netlify="true"
-      data-netlify-honeypot="bot-field"
+      data-netlify-honeypot="bedrijf"
       name="contactForm"
     >
-      <input type="hidden" name="bot-field" />
+      <input type="hidden" name="bedrijf" />
       <input type="hidden" name="form-name" value="contactForm" />
       <div className="relative">
         <input
