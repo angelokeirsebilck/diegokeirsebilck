@@ -186,11 +186,17 @@ const Form = () => {
           {errors.message?.message}
         </div>
       </div>
-      <ThemeButton
+      <button
+        type="submit"
+        className="px-3 py-1.5 text-button uppercase font-semibold transition-colors bg-primary hover:bg-primary-dark text-white mt-3"
+      >
+        Verstuur
+      </button>
+      {/* <ThemeButton
         text="Verstuur"
         type="submit"
         className="bg-primary hover:bg-primary-dark text-white mt-3"
-      />
+      /> */}
     </form>
   )
 }
