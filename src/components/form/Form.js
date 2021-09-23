@@ -3,25 +3,45 @@ import React from "react"
 // Components
 import ThemeButton from "../base/Button"
 
-import { useForm, useFormState } from "react-hook-form"
+import { useForm } from "react-hook-form"
 
 const Form = () => {
-  const { register, handleSubmit, control } = useForm()
-
-  const { errors } = useFormState()
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm()
 
   const onSubmit = data => {
     console.log(data)
   }
 
+  const inputClass =
+    "peer h-5 p-1 w-full border-0 border-b-2 text-base outline-none focus:ring-0 focus:border-primary placeholder-transparent "
+  const textareaClass =
+    "peer h-10 p-1 pt-1.5 leading-none w-full border-0 border-b-2 text-base outline-none focus:ring-0 focus:border-primary placeholder-transparent "
+
+  console.log(errors)
+
   return (
-    <form autoComplete="off" onSubmit={handleSubmit(onSubmit)}>
+    <form
+      autoComplete="off"
+      onSubmit={handleSubmit(onSubmit)}
+      netlify
+      name="contactForm"
+    >
       <div className="relative">
         <input
           id="name"
-          {...register("name", { required: true, pattern: /[A-Za-z]/ })}
+          {...register("name", {
+            required: "Dit veld is verplicht.",
+          })}
           type="text"
-          className="peer h-5 p-1 w-full border-0 border-b-2 text-base outline-none focus:ring-0 focus:border-primary placeholder-transparent"
+          className={
+            errors.name
+              ? inputClass + "focus:border-error border-error "
+              : inputClass
+          }
           placeholder="Naam"
         />
         <label
@@ -37,13 +57,22 @@ const Form = () => {
         >
           Naam
         </label>
+        <div className="absolute right-0 -bottom-2 text-sm text-error z-10 font-medium">
+          {errors.name?.message}
+        </div>
       </div>
-      <div className="relative mt-1">
+      <div className="relative mt-1.5">
         <input
           id="firstname"
-          {...register("firstname")}
+          {...register("firstname", {
+            required: "Dit veld is verplicht.",
+          })}
           type="text"
-          className="peer h-5 p-1 w-full border-0 border-b-2 text-base outline-none focus:ring-0 focus:border-primary placeholder-transparent"
+          className={
+            errors.firstname
+              ? inputClass + "focus:border-error border-error "
+              : inputClass
+          }
           placeholder="Voornaam"
         />
         <label
@@ -59,13 +88,22 @@ const Form = () => {
         >
           Voornaam
         </label>
+        <div className="absolute right-0 -bottom-2 text-sm text-error z-10 font-medium">
+          {errors.firstname?.message}
+        </div>
       </div>
-      <div className="relative mt-1">
+      <div className="relative mt-1.5">
         <input
           id="phone"
-          {...register("phone")}
+          {...register("phone", {
+            required: "Dit veld is verplicht.",
+          })}
           type="text"
-          className="peer h-5 p-1 w-full border-0 border-b-2 text-base outline-none focus:ring-0 focus:border-primary placeholder-transparent"
+          className={
+            errors.phone
+              ? inputClass + "focus:border-error border-error "
+              : inputClass
+          }
           placeholder="Telefoon Nummer"
         />
         <label
@@ -81,13 +119,26 @@ const Form = () => {
         >
           Telefoon Nummer
         </label>
+        <div className="absolute right-0 -bottom-2 text-sm text-error z-10 font-medium">
+          {errors.phone?.message}
+        </div>
       </div>
-      <div className="relative mt-1">
+      <div className="relative mt-1.5">
         <input
           id="email"
-          {...register("email")}
-          type="email"
-          className="peer  h-5 p-1 w-full border-0 border-b-2 text-base outline-none focus:ring-0 focus:border-primary placeholder-transparent"
+          {...register("email", {
+            required: "Dit veld is verplicht.",
+            pattern: {
+              value: /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i,
+              message: "Vul een geldig emailadres in.",
+            },
+          })}
+          type="text"
+          className={
+            errors.email
+              ? inputClass + "focus:border-error border-error "
+              : inputClass
+          }
           placeholder="Email address"
         />
         <label
@@ -103,12 +154,19 @@ const Form = () => {
         >
           Email address
         </label>
+        <div className="absolute right-0 -bottom-2 text-sm text-error z-10 font-medium">
+          {errors.email?.message}
+        </div>
       </div>
-      <div className="relative mt-1">
+      <div className="relative mt-1.5">
         <textarea
           id="message"
-          {...register("message")}
-          className="peer h-10 p-1 pt-1.5 leading-none w-full border-0 border-b-2 text-base outline-none focus:ring-0 focus:border-primary placeholder-transparent"
+          {...register("message", { required: "Dit veld is verplicht." })}
+          className={
+            errors.message
+              ? textareaClass + "focus:border-error border-error "
+              : textareaClass
+          }
           placeholder="Bericht"
         />
         <label
@@ -124,11 +182,14 @@ const Form = () => {
         >
           Bericht
         </label>
+        <div className="absolute right-0 -bottom-2 text-sm text-error z-10 font-medium">
+          {errors.message?.message}
+        </div>
       </div>
       <ThemeButton
         text="Verstuur"
         type="submit"
-        className="bg-primary hover:bg-primary-dark text-white mt-2"
+        className="bg-primary hover:bg-primary-dark text-white mt-3"
       />
     </form>
   )

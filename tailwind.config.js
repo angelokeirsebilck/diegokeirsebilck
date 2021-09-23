@@ -10,6 +10,9 @@ module.exports = {
       transparent: "transparent",
       body: "#333",
       white: "#FFF",
+      error: {
+        DEFAULT: "#F87171",
+      },
       primary: {
         light: "#ffd995",
         DEFAULT: "#fead1b",
@@ -21,7 +24,7 @@ module.exports = {
     },
     fontSize: {
       xs: ".75rem",
-      sm: "1.4rem",
+      sm: "1.5rem",
       tiny: ".875rem",
       base: "1.8rem",
       button: "2.2rem",
