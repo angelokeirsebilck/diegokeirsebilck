@@ -12,8 +12,23 @@ const Form = () => {
     formState: { errors },
   } = useForm()
 
+  function encode(data) {
+    return Object.keys(data)
+      .map(key => encodeURIComponent(key) + "=" + encodeURIComponent(data[key]))
+      .join("&")
+  }
+
   const onSubmit = data => {
-    console.log(data)
+    fetch("/", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: encode({
+        "form-name": "contactForm",
+        ...data,
+      }),
+    })
+      .then(console.log("form submitted."))
+      .catch(error => console.log(error))
   }
 
   const inputClass =
@@ -27,9 +42,12 @@ const Form = () => {
     <form
       autoComplete="off"
       onSubmit={handleSubmit(onSubmit)}
-      netlify
+      data-netlify="true"
+      data-netlify-honeypot="bot-field"
       name="contactForm"
     >
+      <input type="hidden" name="bot-field" />
+      <input type="hidden" name="form-name" value="contactForm" />
       <div className="relative">
         <input
           id="name"
@@ -186,17 +204,11 @@ const Form = () => {
           {errors.message?.message}
         </div>
       </div>
-      <button
-        type="submit"
-        className="px-3 py-1.5 text-button uppercase font-semibold transition-colors bg-primary hover:bg-primary-dark text-white mt-3"
-      >
-        Verstuur
-      </button>
-      {/* <ThemeButton
+      <ThemeButton
         text="Verstuur"
         type="submit"
         className="bg-primary hover:bg-primary-dark text-white mt-3"
-      /> */}
+      />
     </form>
   )
 }
