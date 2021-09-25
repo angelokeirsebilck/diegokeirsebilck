@@ -33,10 +33,10 @@ const Layout = ({ children, global }) => {
   // } else {
   //   document.getElementsByTagName("html")[0].classList.remove("overflow-hidden")
   // }
-  const overflow = global.isSubmitting ? "overflow-hidden" : ""
+  // const overflow = global.isSubmitting ? "overflow-hidden" : ""
 
   return (
-    <div className={overflow}>
+    <div>
       {global.isSubmitting && (
         <div className="fixed top-0 left-0 right-0 bottom-0 h-screen w-screen z-50 flex justify-center items-center">
           <div className="w-25 z-40">
