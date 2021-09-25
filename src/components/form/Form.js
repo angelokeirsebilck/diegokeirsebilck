@@ -1,13 +1,14 @@
 import React, { useState } from "react"
+import { useForm } from "react-hook-form"
 
 // Components
 import ThemeButton from "../base/Button"
 
-import { useForm } from "react-hook-form"
+// Redux
+import { connect } from "react-redux"
+import { changeIsSubmitting } from "../../../actions/globalActions"
 
-const Form = () => {
-  const [isSubmitting, setIsSubmitting] = useState(false)
-
+const Form = ({ changeIsSubmitting }) => {
   const {
     register,
     handleSubmit,
@@ -22,6 +23,7 @@ const Form = () => {
   }
 
   const onSubmit = data => {
+    changeIsSubmitting(true)
     fetch("/", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -32,8 +34,11 @@ const Form = () => {
     })
       .then(() => {
         reset()
+        changeIsSubmitting(false)
       })
-      .catch(error => console.log(error))
+      .catch(error => {
+        changeIsSubmitting(false)
+      })
   }
 
   const inputClass =
@@ -216,4 +221,4 @@ const Form = () => {
   )
 }
 
-export default Form
+export default connect(null, { changeIsSubmitting })(Form)

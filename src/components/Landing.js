@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import { StaticImage } from "gatsby-plugin-image"
 
 // Components
@@ -8,7 +8,7 @@ import Form from "../components/form/Form"
 // Icons
 import { MdMail, MdPhone } from "react-icons/md"
 
-function landing() {
+const Landing = () => {
   return (
     <>
       <div className="h-screen flex flex-col w-auto md:w-160 mx-auto justify-center items-center">
@@ -47,4 +47,4 @@ function landing() {
   )
 }
 
-export default landing
+export default Landing

@@ -2,6 +2,15 @@ require("dotenv").config({
   path: `.env.${process.env.NODE_ENV}`,
 })
 
+const {
+  NODE_ENV,
+  URL: NETLIFY_SITE_URL = "https://elektro-diego.be",
+  DEPLOY_PRIME_URL: NETLIFY_DEPLOY_URL = NETLIFY_SITE_URL,
+  CONTEXT: NETLIFY_ENV = NODE_ENV,
+} = process.env
+const isNetlifyProduction = NETLIFY_ENV === "production"
+const siteUrl = isNetlifyProduction ? NETLIFY_SITE_URL : NETLIFY_DEPLOY_URL
+
 module.exports = {
   flags: {
     DEV_SSR: false,
@@ -11,8 +20,8 @@ module.exports = {
     FUNCTIONS: false,
   },
   siteMetadata: {
-    title: `Elektro Diego - Diego Keirsebilck - Voor al je algemene elektriciteitswerken`,
-    description: `Elektro Diego - Diego Keirsebilck - Voor al je algemene elektriciteitswerken`,
+    title: `Elektro Diego - Voor al je algemene elektriciteitswerken`,
+    description: `Elektro Diego - Voor al je algemene elektriciteitswerken`,
     author: `@AngeloKeirsebilck`,
     twitterUsername: "@AngeloKbilck",
     siteUrl: "https://elektro-diego.be",
@@ -21,13 +30,36 @@ module.exports = {
   plugins: [
     `gatsby-plugin-react-helmet`,
     `gatsby-plugin-image`,
-    `gatsby-plugin-sitemap`,
+    {
+      resolve: "gatsby-plugin-sitemap",
+      options: {
+        serialize: ({ path, modifiedGmt }) => {
+          return {
+            url: path,
+            lastmod: modifiedGmt,
+          }
+        },
+      },
+    },
     {
       resolve: "gatsby-plugin-robots-txt",
       options: {
-        host: "https://elektro-diego.be",
-        sitemap: "https://elektro-diego.be/sitemap/sitemap-index.xml",
-        policy: [{ userAgent: "*", allow: "/" }],
+        resolveEnv: () => NETLIFY_ENV,
+        env: {
+          production: {
+            policy: [{ userAgent: "*" }],
+          },
+          "branch-deploy": {
+            policy: [{ userAgent: "*", disallow: ["/"] }],
+            sitemap: null,
+            host: null,
+          },
+          "deploy-preview": {
+            policy: [{ userAgent: "*", disallow: ["/"] }],
+            sitemap: null,
+            host: null,
+          },
+        },
       },
     },
     `gatsby-transformer-sharp`,

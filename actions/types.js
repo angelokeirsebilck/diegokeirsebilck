@@ -1,0 +1,3 @@
+// Global
+
+export const CHANGE_IS_SUBMITTING = "CHANGE_IS_SUBMITTING"

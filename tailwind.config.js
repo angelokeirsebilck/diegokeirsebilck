@@ -20,6 +20,10 @@ module.exports = {
       },
       gray: {
         DEFAULT: "#9CA3AF",
+        dark: "#4B5563",
+      },
+      overlay: {
+        DEFAULT: "#D1D5DB",
       },
     },
     fontSize: {
@@ -68,10 +72,14 @@ module.exports = {
       44: "44rem",
       48: "48rem",
     },
+    animation: {
+      spin: "spin .5s linear infinite",
+    },
     extend: {
       width: {
         120: "30rem",
         160: "40rem",
+        25: "2.5rem",
       },
     },
   },
