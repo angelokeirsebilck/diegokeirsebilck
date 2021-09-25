@@ -28,11 +28,11 @@ const Layout = ({ children, global }) => {
     }
   `)
 
-  if (global.isSubmitting) {
-    document.getElementsByTagName("html")[0].classList.add("overflow-hidden")
-  } else {
-    document.getElementsByTagName("html")[0].classList.remove("overflow-hidden")
-  }
+  // if (global.isSubmitting) {
+  //   document.getElementsByTagName("html")[0].classList.add("overflow-hidden")
+  // } else {
+  //   document.getElementsByTagName("html")[0].classList.remove("overflow-hidden")
+  // }
   const overflow = global.isSubmitting ? "overflow-hidden" : ""
 
   return (
