@@ -32,6 +32,7 @@ module.exports = {
       tiny: ".875rem",
       base: "1.8rem",
       button: "2.2rem",
+      2.4: "2.4rem",
       md: "3rem",
       lg: "4rem",
       xl: "5rem",

@@ -6,9 +6,20 @@ import ThemeButton from "../base/Button"
 
 // Redux
 import { connect } from "react-redux"
-import { changeIsSubmitting } from "../../../actions/globalActions"
+import {
+  changeIsSubmitting,
+  changeLandingText,
+  changeIsFormText,
+  changeIsError,
+} from "../../../actions/globalActions"
 
-const Form = ({ changeIsSubmitting }) => {
+const Form = ({
+  changeIsSubmitting,
+  changeLandingText,
+  changeIsFormText,
+  changeIsError,
+  global,
+}) => {
   const {
     register,
     handleSubmit,
@@ -23,6 +34,7 @@ const Form = ({ changeIsSubmitting }) => {
   }
 
   const onSubmit = data => {
+    // e.preventDefault()
     changeIsSubmitting(true)
     fetch("/", {
       method: "POST",
@@ -32,19 +44,36 @@ const Form = ({ changeIsSubmitting }) => {
         ...data,
       }),
     })
-      .then(() => {
-        reset()
+      .then(reponse => {
+        changeIsFormText(true)
         changeIsSubmitting(false)
+
+        if (reponse.ok) {
+          reset()
+          changeIsError(false)
+          changeLandingText(
+            "Bedankt om mij te contacteren. Ik neem zo snel mogelijk contact met u op."
+          )
+        } else {
+          // changeLandingTextToError(e)
+          changeIsError(true)
+          changeLandingText("Er ging iets mis. Probeer later opnieuw.")
+        }
+        const top = document.querySelector("#top")
+        if (top) {
+          top.scrollIntoView({ behavior: "smooth" })
+        }
       })
       .catch(error => {
+        console.log(error)
         changeIsSubmitting(false)
       })
   }
 
   const inputClass =
-    "peer h-5 p-1 w-full border-0 border-b-2 text-base outline-none focus:ring-0 focus:border-primary placeholder-transparent "
+    "peer h-5 p-1 pl-0 w-full border-0 border-b-2 text-base outline-none focus:ring-0 focus:border-primary placeholder-transparent "
   const textareaClass =
-    "peer h-10 p-1 pt-1.5 leading-none w-full border-0 border-b-2 text-base outline-none focus:ring-0 focus:border-primary placeholder-transparent "
+    "peer h-10 p-1 pl-0 pt-1.5 leading-none w-full border-0 border-b-2 text-base outline-none focus:ring-0 focus:border-primary placeholder-transparent "
 
   return (
     <form
@@ -53,6 +82,7 @@ const Form = ({ changeIsSubmitting }) => {
       data-netlify="true"
       data-netlify-honeypot="bedrijf"
       name="contactForm"
+      className="w-full"
     >
       <input type="hidden" name="bedrijf" />
       <input type="hidden" name="form-name" value="contactForm" />
@@ -72,7 +102,7 @@ const Form = ({ changeIsSubmitting }) => {
         />
         <label
           htmlFor="name"
-          className="absolute left-1 text-sm top-0 
+          className="absolute left-0 text-sm top-0 
           peer-placeholder-shown:text-base text-gray 
           peer-placeholder-shown:text-gray 
            peer-placeholder-shown:top-2 transition-all 
@@ -103,7 +133,7 @@ const Form = ({ changeIsSubmitting }) => {
         />
         <label
           htmlFor="firstname"
-          className="absolute left-1 text-sm top-0 text-gray  
+          className="absolute left-0 text-sm top-0 text-gray  
           peer-placeholder-shown:text-base
           peer-placeholder-shown:text-gray 
            peer-placeholder-shown:top-2 transition-all 
@@ -134,7 +164,7 @@ const Form = ({ changeIsSubmitting }) => {
         />
         <label
           htmlFor="phone"
-          className="absolute left-1 text-sm top-0  text-gray 
+          className="absolute left-0 text-sm top-0  text-gray 
           peer-placeholder-shown:text-base
           peer-placeholder-shown:text-gray 
            peer-placeholder-shown:top-2 transition-all 
@@ -169,7 +199,7 @@ const Form = ({ changeIsSubmitting }) => {
         />
         <label
           htmlFor="email"
-          className="absolute text-gray  left-1 text-sm top-0 
+          className="absolute text-gray left-0 text-sm top-0 
           peer-placeholder-shown:text-base
           peer-placeholder-shown:text-gray 
            peer-placeholder-shown:top-2 transition-all 
@@ -197,7 +227,7 @@ const Form = ({ changeIsSubmitting }) => {
         />
         <label
           htmlFor="message"
-          className="absolute left-1 text-sm top-0 text-gray 
+          className="absolute left-0 text-sm top-0 text-gray 
             peer-placeholder-shown:text-base
           peer-placeholder-shown:text-gray 
            peer-placeholder-shown:top-2 transition-all 
@@ -212,13 +242,24 @@ const Form = ({ changeIsSubmitting }) => {
           {errors.message?.message}
         </div>
       </div>
-      <ThemeButton
+      <button type="submit" className="btnBase btn--primary mt-3">
+        Verstuur{" "}
+      </button>
+      {/* <ThemeButton
         text="Verstuur"
         type="submit"
         className="bg-primary hover:bg-primary-dark text-white mt-3"
-      />
+      /> */}
     </form>
   )
 }
 
-export default connect(null, { changeIsSubmitting })(Form)
+const mapStateToProps = state => ({
+  global: state.global,
+})
+export default connect(mapStateToProps, {
+  changeIsSubmitting,
+  changeLandingText,
+  changeIsFormText,
+  changeIsError,
+})(Form)

@@ -12,13 +12,7 @@ const isNetlifyProduction = NETLIFY_ENV === "production"
 const siteUrl = isNetlifyProduction ? NETLIFY_SITE_URL : NETLIFY_DEPLOY_URL
 
 module.exports = {
-  flags: {
-    DEV_SSR: false,
-    PRESERVE_WEBPACK_CACHE: false,
-    PRESERVE_FILE_DOWNLOAD_CACHE: false,
-    PARALLEL_SOURCING: false,
-    FUNCTIONS: false,
-  },
+  flags: {},
   siteMetadata: {
     title: `Elektro Diego - Voor al je algemene elektriciteitswerken`,
     description: `Elektro Diego - Voor al je algemene elektriciteitswerken`,
@@ -32,22 +26,86 @@ module.exports = {
     `gatsby-plugin-image`,
     {
       resolve: "gatsby-plugin-sitemap",
+      output: "",
       options: {
-        serialize: ({ path, modifiedGmt }) => {
+        query: `
+        {
+          allFile {
+            edges {
+              node {
+                modifiedTime
+                name
+              }
+            }
+          }
+          allSitePage {
+            nodes {
+              path
+            }
+          }
+          site {
+            siteMetadata {
+              siteUrl
+            }
+          }
+        }
+      `,
+        // resolveSiteUrl: site => {
+        //   return site.siteMetadata.siteUrl
+        // },
+        resolvePages: ({
+          allSitePage: { nodes: allPages },
+          allFile: { edges },
+        }) => {
+          let allPagesNew = []
+
+          allPages.forEach((page, index) => {
+            if (!page.path.includes("404")) {
+              if (page.path == "/") {
+                const edgeFiltered = edges.filter(
+                  edge => edge.node.name == "index"
+                )
+                edgeFiltered.forEach(item => {
+                  const pageObject = {
+                    path: page.path,
+                    lastMod: item.node.modifiedTime,
+                  }
+                  allPagesNew.push(pageObject)
+                })
+              } else {
+                const edgeFiltered = edges.filter(
+                  edge => edge.node.name == page.path.replace(/\//g, "")
+                )
+                edgeFiltered.forEach(item => {
+                  const pageObject = {
+                    path: page.path,
+                    lastMod: item.node.modifiedTime,
+                  }
+                  allPagesNew.push(pageObject)
+                })
+              }
+            }
+          })
+
+          return allPagesNew
+        },
+        serialize: ({ path, lastMod }) => {
           return {
             url: path,
-            lastmod: modifiedGmt,
+            lastmod: lastMod,
           }
         },
       },
     },
     {
       resolve: "gatsby-plugin-robots-txt",
+
       options: {
         resolveEnv: () => NETLIFY_ENV,
         env: {
           production: {
             policy: [{ userAgent: "*" }],
+            sitemap: `https://elektro-diego.be//sitemap/sitemap-0.xml`,
           },
           "branch-deploy": {
             policy: [{ userAgent: "*", disallow: ["/"] }],

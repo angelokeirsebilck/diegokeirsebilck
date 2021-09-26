@@ -17,3 +17,11 @@ select:-webkit-autofill:focus {
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.btnBase {
+  @apply px-3 py-1.5 text-button uppercase font-semibold transition-colors cursor-pointer;
+}
+
+.btn--primary {
+  @apply bg-primary hover:bg-primary-dark text-white;
+}
